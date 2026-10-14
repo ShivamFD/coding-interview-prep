@@ -50,13 +50,16 @@ FUNCTION_NAME() OVER (
 | **8** | Anjali | IT | 75000 |
 
 ---
-🧠 Visual Guide: ROW_NUMBER vs RANK vs DENSE_RANK
-When there is a tie (Amit and Anjali both have salary = 75000):
+## 🧠 Visual Guide: ROW_NUMBER vs RANK vs DENSE_RANK
+
+When there is a tie (e.g., Amit and Anjali both have `salary = 75000`), the ranking functions behave differently:
+
+```mermaid
 graph TD
     A[Tie Detected: Amit & Anjali both 75000] --> B(ROW_NUMBER)
     A --> C(RANK)
     A --> D(DENSE_RANK)
-    
+
     B --> B1[Unique Sequence: 1, 2, 3, 4...]
     C --> C1[Same Rank + Skip: 1, 2, 2, 4...]
     D --> D1[Same Rank + No Skip: 1, 2, 2, 3...]
@@ -65,71 +68,114 @@ graph TD
     style B1 fill:#e3f2fd,stroke:#1e88e5
     style C1 fill:#ffebee,stroke:#e53935
     style D1 fill:#e8f5e9,stroke:#43a047
-  
- 🎯 Tasks & Solutions
-🔹 Task 1: Unique Row Number by Salary (Highest → Lowest)
-SELECT 
-    name,
-    department,
-    salary,
-    ROW_NUMBER() OVER (ORDER BY salary DESC) AS row_num
-FROM employees;
-🔹 Task 2: Rank Within Each Department (RANK)
-SELECT 
-    name,
-    department,
-    salary,
-    RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS rank_in_dept
-FROM employees;
-🔹 Task 3: Dense Rank Within Each Department (DENSE_RANK)
-SELECT 
-    name,
-    department,
-    salary,
-    DENSE_RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS dense_rank_in_dept
-FROM employees;
-🔹 Task 4: Top 2 Highest Paid Employees in Each Department
+```
+
+---
+
+## 🎯 Tasks & Solutions
+
+### 🔹 Task 1: Unique Row Number by Salary (Highest → Lowest)
+
+```sql
 SELECT 
     name, 
     department, 
-    salary
+    salary, 
+    ROW_NUMBER() OVER (ORDER BY salary DESC) AS row_num 
+FROM employees;
+```
+
+---
+
+### 🔹 Task 2: Rank Within Each Department (RANK)
+
+```sql
+SELECT 
+    name, 
+    department, 
+    salary, 
+    RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS rank_in_dept 
+FROM employees;
+```
+
+---
+
+### 🔹 Task 3: Dense Rank Within Each Department (DENSE_RANK)
+
+```sql
+SELECT 
+    name, 
+    department, 
+    salary, 
+    DENSE_RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS dense_rank_in_dept 
+FROM employees;
+```
+
+---
+
+### 🔹 Task 4: Top 2 Highest Paid Employees in Each Department
+
+```sql
+SELECT 
+    name, 
+    department, 
+    salary 
 FROM (
     SELECT 
-        name,
-        department,
-        salary,
-        ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC) AS rn
+        name, 
+        department, 
+        salary, 
+        ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC) AS rn 
     FROM employees
-) ranked
+) ranked 
 WHERE rn <= 2;
-🔹 Task 5: Previous Higher Salary using LAG()
-SELECT 
-    name,
-    department,
-    salary,
-    LAG(salary) OVER (PARTITION BY department ORDER BY salary DESC) AS previous_higher_salary
-FROM employees;
-💡 Key Takeaways for Interviews
-ROW_NUMBER() → Always unique numbers
-RANK() → Same rank for ties + skips next number
-DENSE_RANK() → Same rank for ties + no skipping
-Window functions never reduce the number of rows
-PARTITION BY works like GROUP BY but keeps all rows
-“Top N per group” is almost always solved using ROW_NUMBER() + subquery
-🔥 Bonus Challenge
-Problem: Find the employee with the second highest salary in each department.
-Solution:
+```
+
+---
+
+### 🔹 Task 5: Previous Higher Salary using LAG()
+
+```sql
 SELECT 
     name, 
     department, 
-    salary
+    salary, 
+    LAG(salary) OVER (PARTITION BY department ORDER BY salary DESC) AS previous_higher_salary 
+FROM employees;
+```
+
+---
+
+## 💡 Key Takeaways for Interviews
+
+* **`ROW_NUMBER()`** ➡️ Always generates unique sequential numbers.
+* **`RANK()`** ➡️ Assigns the same rank for ties + skips the next sequence number.
+* **`DENSE_RANK()`** ➡️ Assigns the same rank for ties + does **not** skip any numbers.
+* **Row Retention** ➡️ Window functions never reduce or collapse the final output row count.
+* **`PARTITION BY` vs `GROUP BY`** ➡️ `PARTITION BY` groups records like a `GROUP BY` clause but preserves the individual rows.
+* **"Top N per group" Problems** ➡️ Almost always solved using a combination of `ROW_NUMBER()` / `DENSE_RANK()` inside a subquery.
+
+---
+
+## 🔥 Bonus Challenge
+
+**Problem:** Find the employee with the second highest salary in each department.
+
+**Solution:**
+```sql
+SELECT 
+    name, 
+    department, 
+    salary 
 FROM (
     SELECT 
-        name,
-        department,
-        salary,
-        DENSE_RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS dr
+        name, 
+        department, 
+        salary, 
+        DENSE_RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS dr 
     FROM employees
-) ranked
+) ranked 
 WHERE dr = 2;
-Note: We use DENSE_RANK() so that if multiple people share the highest salary, the next distinct salary still gets rank 2.
+```
+
+> 📌 **Note:** We intentionally use `DENSE_RANK()` here. If multiple people share the top highest salary, the next distinct lower salary still correctly gets assigned rank 2.
