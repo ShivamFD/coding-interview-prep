@@ -80,6 +80,7 @@ Otherwise → 'Not Eligible'
 Solution
 
 -- 1. Create salary_level
+```sql
 SELECT 
   name,
   salary,
@@ -89,8 +90,9 @@ SELECT
     ELSE 'High'
   END AS salary_level
 FROM employees;
-
+```
 -- 2. Calculate bonus based on department
+```sql
 SELECT 
   name,
   department,
@@ -102,8 +104,9 @@ SELECT
     ELSE 0
   END AS bonus
 FROM employees;
-
+```
 -- 3. Promotion eligibility
+```sql
 SELECT 
   name,
   salary,
@@ -112,8 +115,9 @@ SELECT
     ELSE 'Not Eligible'
   END AS promotion_status
 FROM employees;
-
+```
 -- 4. Count employees in each salary level
+```sql
 SELECT 
   CASE
     WHEN salary < 50000 THEN 'Low'
@@ -128,36 +132,26 @@ GROUP BY
     WHEN salary BETWEEN 50000 AND 70000 THEN 'Medium'
     ELSE 'High'
   END;
-
+```
   Explanation
 
 • In query 1 & 3 we used Searched CASE (with conditions).
-
 In query 2 we used Simple CASE (comparing one column against values).
-
 Query 4 shows that we can use CASE inside GROUP BY as well.
-
 ELSE is optional but recommended to handle unexpected values.
 
 Key Points
 
 CASE must end with END.
-
 You can use CASE in SELECT, WHERE, ORDER BY, and GROUP BY.
-
 Simple CASE is cleaner when checking one column against multiple values.
 
 • Searched CASE is more flexible for complex conditions.
-
 Bonus Challenge
 Write a query that shows:
-
 Employee name
-
 • Salary
-
 Salary Level (Low/Medium/High)
-
 And sort the result by salary level in this order: High → Medium → Low
 
 
