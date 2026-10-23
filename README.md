@@ -1,9 +1,9 @@
 # 🚀 Coding Interview Prep
 
-![GitHub repo size](https://img.shields.io/github/repo-size/YOUR_USERNAME/coding-interview-prep?style=for-the-badge)
-![GitHub last commit](https://img.shields.io/github/last-commit/YOUR_USERNAME/coding-interview-prep?style=for-the-badge)
-![GitHub stars](https://img.shields.io/github/stars/YOUR_USERNAME/coding-interview-prep?style=for-the-badge)
-![GitHub forks](https://img.shields.io/github/forks/YOUR_USERNAME/coding-interview-prep?style=for-the-badge)
+![GitHub repo size](https://img.shields.io/github/repo-size/shivamFD/coding-interview-prep?style=for-the-badge)
+![GitHub last commit](https://img.shields.io/github/last-commit/shivamFD/coding-interview-prep?style=for-the-badge)
+![GitHub stars](https://img.shields.io/github/stars/ShivamFD/coding-interview-prep?style=for-the-badge)
+![GitHub forks](https://img.shields.io/github/forks/shivamFD/coding-interview-prep?style=for-the-badge)
 
 > **Daily consistency is the key to cracking interviews.**
 
